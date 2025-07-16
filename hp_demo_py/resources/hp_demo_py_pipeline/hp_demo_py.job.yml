@@ -1,0 +1,19 @@
+# The job that triggers hp_demo_py_pipeline.
+resources:
+  jobs:
+    hp_demo_py_job:
+      name: hp_demo_py_job
+
+      trigger:
+        # Run this job every day, exactly one day from the last run; see https://docs.databricks.com/api/workspace/jobs/create#trigger
+        periodic:
+          interval: 1
+          unit: DAYS
+
+      email_notifications:
+        on_failure: ${var.notifications}
+
+      tasks:
+        - task_key: refresh_pipeline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.hp_demo_py_pipeline.id}
